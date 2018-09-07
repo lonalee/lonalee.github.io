@@ -1,0 +1,183 @@
+      /* Simple Reset CSS */
+      @font-face {
+        font-family:"vibra";
+        src:url('../../../Downloads/vibra/VIBRA-Reg - Copie.ttf');
+      }
+      @font-face {
+        font-family:"lunchtype";
+        src:url('../../../Downloads/radcliffe/Radcliffe-Bold-Italic-trial.ttf');
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 12px;
+        color: #58666e;
+        background-color: #c8d6e5;
+      }
+      li {
+        list-style: none;
+      }
+      a {
+        text-decoration: none;
+      }
+      .nav-items > li > a {
+        text-decoration: none;
+        color: rgba(187, 22, 22, 0.4);
+      }
+      header {
+        position: fixed;
+        width : 100%;
+        height : 60px;
+        z-index: 2000;
+        background-color: #ffffff;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(0, 0, 0, 0.05);
+      }
+      nav {
+        float: right;
+      }
+      .id {
+        font-family: vibra;
+        font-size: 3.5rem;
+        margin-left: 15px;
+      }
+      .nav-items > li {
+        display: inline-block;
+        line-height: 60px;
+        padding: 0 30px;
+      }
+      .nav-items > li > a:hover {
+        color: rgba(92, 16, 86, 0.4);
+      }
+      #content-wrap {
+        padding-top: 65px;
+      }
+      #content-wrap::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+      aside {
+        position: fixed;
+        width: 180px;
+        height: 100%;
+        background-color: #333333;
+        /* padding: 0 10px; */
+        padding: 20px 0 20px 20px;
+        margin-top: 10px;
+      }
+      aside > h1 {
+        padding: 20px 0 20px 20px;
+        color: #fff;
+      }
+      aside > ul > li > a {
+        display: block;
+        color: #fff;
+        padding: 10px 0 10px 20px;
+      }
+      aside > ul > li > a.active {
+        background-color: #4CAF50;
+      }
+      aside > ul > li > a:hover:not(.active) {
+        background-color: #555;
+      }
+      /* section {
+        float: right;
+        margin-left: 200px;
+      } */
+      .section-main-page {
+        margin: 10px 100px 0 100px;
+        background-color: #000000;
+      }
+      .section-main-page h1 {
+        position: absolute;
+      }
+      .section-main-page img {
+        opacity: 0.7;
+        width: 883px;
+        height: 400px;
+      }
+      .intro {
+        margin: 10px 100px 0 100px;
+        padding-top: 20px;
+        border: 1px solid #000000;
+        background: #f5f6fa;
+      }
+      .intro h2 {
+        text-align: center;
+        font-size: 3em;
+      }
+      .intro p {
+        padding: 20px 100px;
+        font-size: 2.1em;
+        letter-spacing: 0.5;
+      }
+      article {
+        float: left;
+    /* display: inline-block; */
+        width: 300px;
+        height: 335px;
+        margin: 10px;
+        padding: 25px;
+        background-color: white;
+      }
+      article > p {
+        padding-top: 10px;
+      }
+      footer {
+        position: absolute;
+        height: 70px;
+        width: 100%;
+        padding: 0 25px;
+        line-height: 60px;
+        color: #8a8c8f;
+        border-top: 1px solid #dee5e7;
+        background-color: #f2f2f2;
+        bottom: 0;
+      }
+/* ---------------------------------------------참고------------------------------------------- */
+      /* entire container, keeps perspective */
+.flip-container {
+  float: left;
+	perspective: 1000px;
+}
+	/* flip the pane when hovered */
+	.flip-container:hover .flipper, .flip-container.hover .flipper {
+		transform: rotateY(180deg);
+	}
+
+.flip-container, .front, .back {
+	width: 320px;
+	height: 335px;
+}
+
+/* flip speed goes here */
+.flipper {
+	transition: 0.6s;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+	/* for firefox 31 */
+	transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+	transform: rotateY(180deg);
+}
