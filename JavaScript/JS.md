@@ -4,7 +4,7 @@ layout: post
 ---
 ## 기술 부채 (2018. 6. 12.)
 
-|  <center>KeyWords</center> |  <center>설명</center> |  <center></center> |
+|  <center> KeyWords </center> |  <center>  설명  </center> |  <center> 비고  </center> |
 |:--------|:--------|:--------|
 |**일급 객체** | 생성,연산,대입, 인자/반환값 역할 등을 제한 없이 할 수 있는 대상 |*4가지 필요 조건* |
 |-| 무명 리터럴로 표현 가능, 변수/객체/배열에 저장 가능, 함수의 파라미터로 전달 가능, return value로 사용 가능 |JavaScript Function |
@@ -21,6 +21,7 @@ layout: post
 |**call method** |||
 |**caller & callee** |||
 |**apply method** |||
+
 
 
 <!-- |  <center>Header1</center> |  <center>Header2</center> |  <center>Header3</center> |

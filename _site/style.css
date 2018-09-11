@@ -181,3 +181,9 @@
 .back {
 	transform: rotateY(180deg);
 }
+
+/* HTML page */
+/* 기술 부채 표 */
+.html-debt table {
+  margin: 0 auto;
+}
