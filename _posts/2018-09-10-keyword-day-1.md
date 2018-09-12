@@ -2,7 +2,7 @@
 title: Day 1
 layout: post
 ---
-# KEYWORDS 단위 정리 (Day 1)
+# KEYWORDS 정리 (Day 1)
 
 ## Programming 이란
 
