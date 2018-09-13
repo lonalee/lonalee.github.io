@@ -30,13 +30,13 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: LOGAN
-subtitle:
+title: O.M.T.
+subtitle: Only Matter of Time
 description: >- # this means to ignore newlines until "baseurl:"
   This blog is designed to be my first one ever, which means, there might not be much useful stuff at the moment, however I'll make this useful, valuable soon.
 author: Josh YA. Lee
 email: lonalee2018@gmail.com
-avatar: assets/images/avatar.jpg
+# avatar: assets/images/KakaoTalk_Photo_2018-09-14-00-30-35-1.jpeg
 
 # You'll want to customize url and baseurl for your own site:
 baseurl: "/lonalee.github.io" # the subpath of your site, e.g. /blog
