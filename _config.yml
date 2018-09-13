@@ -31,7 +31,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: LOGAN
-subtitle: Login to Opportunity and Grab A
+subtitle:
 description: >- # this means to ignore newlines until "baseurl:"
   This blog is designed to be my first one ever, which means, there might not be much useful stuff at the moment, however I'll make this useful, valuable soon.
 author: Josh YA. Lee
