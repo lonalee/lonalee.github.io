@@ -22,13 +22,3 @@ mutable한 기본자료형은 다른 변수에 할당된다면 기존 값의 변
 
 callback 함수를 이해하기 위해서는 비동기 처리 방식을 알아야 합니다. 비동기 처리란 자바스크립트가 동작할 때 코드의 실행 결과를 기다리지 않고서도 다음 코드를 실행할 수 있는 동작 방식을 의미합니다.
 자바스크립트의 대부분의 DOM 이벤트와 Timer 함수(setTimeout, setInterval), Ajax 요청은 비동기식 처리 모델로 동작합니다. 대표적인 예로 setTimeout이 있는데, 일정 시간이 경과한 후에 동작할 함수를 정의할 수 있습니다. 이와 같은 함수가 바로 callback 함수 입니다. Ajax 요청에서는 서버로부터의 응답을 기다리지 않고 다음의 코드를 실행하여 화면을 표시할 수도 있습니다. 그렇게 되면 우리가 기대한 서버의 결과를 누락 시키고 다음 코드를 실행할 수도 있습니다. 이를 방지하기 위해서도 callback 함수가 사용됩니다. 서버의 응답이 수신되면 그 때 callback함수로 해당 처리를 하게 만드는 것입니다.
-
-
-
-참고.
-  tabindex로 focus 주기
-  overflow scroll
-  반응형?
-  position absolute 끼리 레이어되는 순서? -> z-index
-
-  선택 박스 제거 시, event.currentTarget과 event.target이 다름을 이용하여 제거. currentTarget과 target이 같을 때 display none 처리했음 -> 이를 위해서 선택 박스 *별도의 컨테이너에 패딩(bottom)*을 약간 줘서 currentTarget과 target이 같아질 수 있도록 인위적으로 처리함.

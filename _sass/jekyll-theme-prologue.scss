@@ -99,6 +99,7 @@
 	h2 {
 		font-size: 2em;
 		letter-spacing: -1px;
+		margin-bottom: 30px;
 	}
 
 	h3 {
@@ -233,6 +234,9 @@
 			margin-left: 1.25em;
 		}
 	}
+	#Lesson-learned {
+		margin-bottom: 30px;
+					}
 
 /* Image */
 
@@ -654,6 +658,9 @@
 				p {
 					font-style: italic;
 				}
+			}
+			#Lesson-learned {
+				margin-bottom: 30px;
 			}
 		}
 		> section, article {
