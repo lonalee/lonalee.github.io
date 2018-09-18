@@ -24,4 +24,5 @@ order: 3
 
 - 사용자 접근 시 public폴더에 정적 파일들(html 등)을 렌더링하도록 구현 (express.static)
 - 로그인 페이지의 사용자 입력 정보를 express를 이용하여 서버에 전송하고 응답값을 수신하였다.
--
+- 헤로쿠에 deploy하고 local web 환경 까지 구축.
+- 헤로쿠 <-> mongoDB만 하면 됨
