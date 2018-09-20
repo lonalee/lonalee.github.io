@@ -36,7 +36,8 @@ order: 3
 - DB로 POST하려면 MODEL 정의 : model명.js -> export (DB의 스키마를 생성; 데이터의 자료형을 정의한다)
 - index.js에서 해당 모듈 import(require)
 - 사용자 입력값을 객체화 하려면 input 하나하나에 이벤트를 걸어야 한다...(이러한 이유로 angular와 같은 framework에서는 form 관련 요소가 존재했던 것.)
-- vanila JS에서는 유사한 개념이 없는지
+  - vanila JS에서는 유사한 개념이 없는지
+
 ### Responsive web site
 
 - breakpoint에서 적용될 스타일의 정의
