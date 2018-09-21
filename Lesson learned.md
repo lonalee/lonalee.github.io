@@ -1,5 +1,5 @@
 ---
-title: Components
+title: Lesson learned
 subtitle: Oh my gosh!
 layout: page
 icon: fa-book
@@ -25,7 +25,6 @@ order: 3
   express// index.ejs 파일에서 스크립트 로드할 때, public으로 기본적으로 src 루트가 설정되어있는듯.
     <script type="text/javascript" src="./signup.js"></script>
 
-
 - 사용자 접근 시 public폴더에 정적 파일들(html 등)을 렌더링하도록 구현 (express.static)
 - 로그인 페이지의 사용자 입력 정보를 express를 이용하여 서버에 전송하고 응답값을 수신하였다.
 - 헤로쿠에 deploy하고 local web 환경 까지 구축.
@@ -35,6 +34,10 @@ order: 3
 - DB : lonalee2018
 - DB로 POST하려면 MODEL 정의 : model명.js -> export (DB의 스키마를 생성; 데이터의 자료형을 정의한다)
 - index.js에서 해당 모듈 import(require)
+- DB 확인은 local web에서는 안됨. deploy 해서 /books로 get 요청했을 때는 됐음 why?
+- save()가 실제로 DB에 객체를 저장함.
+- routes = /people
+- model = /person (Person()으로 인스턴스 생성)
 - 사용자 입력값을 객체화 하려면 input 하나하나에 이벤트를 걸어야 한다...(이러한 이유로 angular와 같은 framework에서는 form 관련 요소가 존재했던 것.)
   - vanila JS에서는 유사한 개념이 없는지
 
