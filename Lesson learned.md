@@ -6,9 +6,8 @@ icon: fa-book
 order: 3
 ---
 
-## Lesson-learned
 
-### Sign up 페이지 MarkUp & Styling *09. 12.*
+## Sign up 페이지 MarkUp & Styling (*09. 12.*)
 
 - tabindex로 focus 적용
   - 휴대전화 번호의 드롭다운 박스를 열고, 아무것도 선택하지 않고 화면의 다른 영역(드롭다운 박스 이외의)을 클릭할 때 드롭다운 박스를 없애기 위해서 blur event를 적용하고자 한다. 따라서 드롭다운 박스를 화면 표시할 때 focus를 줘야 하는데 div, ul 등의 요소는 tabindex로 인위적으로 focusing 가능하게 해야 focus() 메소드가 의도대로 작동한다.
@@ -41,6 +40,19 @@ order: 3
 - 사용자 입력값을 객체화 하려면 input 하나하나에 이벤트를 걸어야 한다...(이러한 이유로 angular와 같은 framework에서는 form 관련 요소가 존재했던 것.)
   - vanila JS에서는 유사한 개념이 없는지
 
+#### **/books test 정리**
+
+* 필요한 dir 및 file
+  - models/books.js : DB에 저장할 데이터의 모델링 => 어떤 key & value를 가질지 정의한다! (스키마)
+  - routes/books.js : /books로 요청이 발생할 때 처리 (*보완필요*)
+
+> **개념 재 정립**!<br>
+> client-side JS에서는 server 측 처리가 필요한 이벤트 발생 시 xmlHttpRequest로 인스턴스를 생성하여 HTTP Method를 사용한다. <br>
+  > 예를 들어, /books로 post 요청을 생성, stringify해서 json으로 변환하여 payload(body)에 담아서 전송<br>
+> server-side JS에서는 rest-API를 정의해 놓는다.<br>
+  > 예를 들어, /books로 POST 요청이 오면 다음의 콜백함수로 처리하자고.<br>
+
+<br>
 ### Responsive web site
 
 - breakpoint에서 적용될 스타일의 정의

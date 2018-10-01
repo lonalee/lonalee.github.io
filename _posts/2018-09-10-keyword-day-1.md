@@ -2,7 +2,7 @@
 title: Day 1
 layout: post
 ---
-# KEYWORDS 정리 (Day 1)
+# Programming, Statement, ES6 특징
 
 ## Programming 이란
 

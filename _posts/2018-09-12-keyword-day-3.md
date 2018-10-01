@@ -2,7 +2,7 @@
 title: Day 3
 layout: post
 ---
-# KEYWORDS 정리 (Day 3)
+# pass-by-value vs pass by reference, object property vs method, hoisting
 
 ## pass-by-value vs pass by reference
 

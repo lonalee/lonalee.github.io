@@ -2,7 +2,7 @@
 title: Day 2
 layout: post
 ---
-# KEYWORDS 정리 (Day 2)
+# Framework VS Library, Operator, Control flow & Code block (Block statement)
 
 ## Framework VS Library
 
