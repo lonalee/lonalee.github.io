@@ -41,6 +41,17 @@ Board는 어떤 square가 null 아닌 값으로 채워져 있는지 알 수 있�
 이제 Square가 Board의 상태를 업데이트하기 위한 방법을 마련해야 한다.
 상태란 그것을 정의하는 컴퍼넌트에게는 private한 것으로 간주되기 때문에 Square로부터 직접적으로 Board의 상태를 업데이트할 수는 없다.
 
+Now we’re passing down two props from Board to Square: value and onClick.
+이제 Board -> Square로 2 종류(value, onClick)의 props를 전달할 수 있다.
+
+onClick prop은 함수이다. 이 함수는 클릭 발생 시 Square에 의해서 호출되는 함수이다. 그리고 Square 컴퍼넌트에 대한 다음과 같은 수정사항을 적용한다.
+
+```
+this.state.value -> this.props.value  (in Square’s render method)
+this.setState() -> this.props.onClick() (in Square’s render method)
+constructor 삭제 (더 이상 game 컴퍼넌트의 상태를 추적하지 않기 때문)
+```
+
 Square가 클릭되면 Board에 의해 onClick 함수가 호출되어 진다.
 세부 단계는 다음과 같다.
 
@@ -49,6 +60,41 @@ Square가 클릭되면 Board에 의해 onClick 함수가 호출되어 진다.
 3. 이벤트 핸들러는 this.props.onClick() 함수를 호출한다. Square의 onClick prop은 Board에 의해 구체화되었다.
 4. Board에서 Square로 onClick={ () => this.handleClick(i) } 이벤트 핸들러를 전달하기 때문에, Square는 클릭 이벤트 발생 시 this.handleClick(i)을 호출한다.
 5. handleClick() 메소드는 아직 정의하지 않았기 때문에 코드는 실행되지는 않는다.
+
+handleClick 메소드 정의 후,
+
+After these changes, we’re again able to click on the Squares to fill them.
+Square를 클릭하여 X 마크를 할 수 있게 되었다. 그러나 현재는 상태를 개별 Square 컴퍼넌트가 아닌 **Board 컴퍼넌트 안**에 저장하는 것이다.
+Board 컴퍼넌트의 상태가 변화할 때, Square 컴퍼넌트가 자동적으로 다시 rendering을 수행한다.
+Board 컴퍼넌트 내의 모든 square (상자들)의 상태를 유지해야 승자를 결정할 수 있을 것이다.
+
+Square 컴퍼넌트는 더 이상 상태를 유지하지 않기 때문에 그것들은 Board 컴퍼넌트로부터 값을 받고 그것들이 클릭 될 때 그 사실을 Board에게 통보한다. Square 컴퍼넌트는 Board의 통제를 받는 컴퍼넌트이다.
+
+handleClick 메소드에서 slice라는 배열 메소드를 사용해서 squares array의 복사본을 생성했다. 원본 배열에 대한 직접적인 수정을 피하기 위함인데 **복사본을 생성한 보다 자세한 이유는 다음 섹션에서!!!**
+
+### 변경불가성이 중요한 이유?
+
+바로 이전 섹션에서 slice 메소드를 사용한 이유가 언급되었다. 이것을 설명하기 위해서 변경불가성에 대해서 논의하고 이것이 중요한 이유를 알아본다.
+There are generally two approaches to changing data. The first approach is to mutate the data by directly changing the data’s values. The second approach is to replace the data with a new copy which has the desired changes.
+
+일반적으로 데이터를 변경하는데에는 2가지 방법이 있다. 첫번째 방법은 데이터의 값을 직접 수정하는 것이고, 두번째는 새로운 값을 갖는 복사본으로 데이터를 바꾸는 방법이다.
+
+The end result is the same but by not mutating (or changing the underlying data) directly, we gain several benefits described below.
+
+두 가지 방법은 결과는 같을 것이다. 그러나 새로운 복사본으로 대체하는 방법이 더욱 유용하다.
+
+1. 기능의 단순화
+    1. 불변성은 복잡한 특성들의 실행을 쉽게 만든다. 이 튜토리얼의 후반부에서 "time travel"이라는 feature를 생성할 것이다. 그것은 tic-tac-toe 게임의 진행 history 확인, 이전 순서로 복귀를 가능하게 만드는 기능이다. 이 기능은 일반적으로 어플리케이션에서 사용되는 기능이다. 직접적인 데이터 수정을 지양해야만 게임의 history를 확인할 수 있을 것이며 재사용할 수도 있을 것이다.
+
+2. 변화 감지
+    1. 변경 가능한 대상에 대한 변화 감지는 어려움이 따를 수 있다. 왜냐하면 그것들은 직접적으로 수정이 가능한 것들이기 때문이다. 이러한 변화 감지는 변경 가능 대상이 그것의 이전 상태와 비교를 통해서 가능한 것인데, 이것은 객체의 전체적인 구조를 대상으로도 비교를 하려고 한다.
+    2. 불변 객체에 대한 변화 감지는 상당히 수월하다. 만약 불변 객체(어떤 것으로부터 참조되는)가 이전의 상태와 다르다면 그 객체는 변경된 것이다.
+
+
+3. re-rendering 시점 결정
+    1. 불변성의 주된 이점은 순수한 컴퍼넌트를 만들 수 있게 해준다는 점이다. 불변성질의 데이터는 변화의 발생 여부를 쉽게 판단할 수 있다. 그 변화는 re-rendering 타이밍을 결정하는데 중요한 역할을 한다.
+    2. shouldComponentUpdate() 메소드에 대해 학습하고 순수 컴퍼넌트를 작성하는 방법 또한 학습할 수 있다. (Optimizing Performance 참조)
+
 
 - 할 일
   - view folder 생성
