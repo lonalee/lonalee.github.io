@@ -33,15 +33,22 @@ order: 3
     return <Square value={this.state.squares[i]} />;
   }
   ```
+
 - 각 Square는 'X', 'O', or null 값을 가질 수 있는 prop 값을 받을 수 있다.
-Next, we need to change what happens when a Square is clicked.
+
 다음으로, Square가 클릭될 때 발생하는 일을 araboza.
+Board는 어떤 square가 null 아닌 값으로 채워져 있는지 알 수 있다.
+이제 Square가 Board의 상태를 업데이트하기 위한 방법을 마련해야 한다.
+상태란 그것을 정의하는 컴퍼넌트에게는 private한 것으로 간주되기 때문에 Square로부터 직접적으로 Board의 상태를 업데이트할 수는 없다.
 
-The Board component now maintains which squares are filled.
-Board는 어떤 square가 null 아닌 값으로 채워져 있는지 그 상태를 유지할 수 있다.
- We need to create a way for the Square to update the Board’s state. Since state is considered to be private to a component that defines it, we cannot update the Board’s state directly from Square.
+Square가 클릭되면 Board에 의해 onClick 함수가 호출되어 진다.
+세부 단계는 다음과 같다.
 
-
+1. button 컴퍼넌트에 있는 onClick prop이 React에 클릭 이벤트 리스너를 준비하라고 전달한다.
+2. 버튼이 클릭되면, React는 Square의 render() 메소드에 정의된 onClick 이벤트 핸들러를 호출한다.
+3. 이벤트 핸들러는 this.props.onClick() 함수를 호출한다. Square의 onClick prop은 Board에 의해 구체화되었다.
+4. Board에서 Square로 onClick={ () => this.handleClick(i) } 이벤트 핸들러를 전달하기 때문에, Square는 클릭 이벤트 발생 시 this.handleClick(i)을 호출한다.
+5. handleClick() 메소드는 아직 정의하지 않았기 때문에 코드는 실행되지는 않는다.
 
 - 할 일
   - view folder 생성
