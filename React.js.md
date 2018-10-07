@@ -20,11 +20,11 @@ order: 3
   - click 시 state의 변화
     - 각 square의 state는 (X로 변한 상태) 부모 컴퍼넌트(Board)에서 관리.
 
-- lifting state up
-  - 9 개의 null로 채워진 배열 생성 (Board component)
+- lifting state up (상태를 부모 컴퍼넌트에게 전달?)
+  - 9 개의 null로 채워진 배열 생성 (in the Board component)
   - 초반부에 value prop을 Board에서 자식 컴퍼넌트로 전달했다. 이를 통해서 각 네모 상자에서 0~8까지 표시할 수 있게 되었다.
   - 각 숫자를 Square 컴퍼넌트의 상태에 따라(클릭 여부에 따라) X 표시로 교체했다.
-  - 이것이 Square 컴퍼넌트가 현재 Board로부터 전달된 value prop을 무시하는 이유이다. ?
+    이로 인해 Square 컴퍼넌트는 현재 Board로부터 전달되는 value prop을 무시한다.
 - 메커니즘을 재 전달하는 prop 값을 사용한다. 그리고 Board는 각 Square에 현재 값('X', 'O', or null)을 알려주기 위해서 수정이 필요하다.
 - Board의 constructor에 배열을 정의하였고, Board의 renderSquare 메소드가 그 배열을 참조할 수 있도록 수정
 
@@ -94,6 +94,19 @@ The end result is the same but by not mutating (or changing the underlying data)
 3. re-rendering 시점 결정
     1. 불변성의 주된 이점은 순수한 컴퍼넌트를 만들 수 있게 해준다는 점이다. 불변성질의 데이터는 변화의 발생 여부를 쉽게 판단할 수 있다. 그 변화는 re-rendering 타이밍을 결정하는데 중요한 역할을 한다.
     2. shouldComponentUpdate() 메소드에 대해 학습하고 순수 컴퍼넌트를 작성하는 방법 또한 학습할 수 있다. (Optimizing Performance 참조)
+
+### Functional Components
+
+Square 컴퍼넌트를 기능적(functional) component로 바꾸어본다.
+리액트에서는 기능적 컴퍼넌트는 컴퍼넌트를 작성하기 위한 보다 쉬운 방법이다. 그 컴퍼넌트들은 rendering을 위한 메소드만을 담고 있으며 그 자신들의상태와 관련된 것들은 갖고 있지 않다.
+React.Component를 확장하는 하나의 클래스를 정의하는 것 대신에, props를 인자로 받고 화면에 rendering될 내용을 return하는 함수를 작성할 수있다.
+기능적, 함수형 컴퍼넌트는 클래스 형태로 작성하는 것 보다 간결하다. 많은 컴퍼넌트들이 이러한 형태로 표현될 수 있다.
+
+> Square 클래스에 함수 삽입
+
+### Taking Turns
+
+Tic-Tac-Toe게임의 순서를 명확히 하기 위해서 X,O가 번갈아서 표시되어야 한다. 첫번째는 default로 X로 시작한다. Board 컴퍼넌트의 constructor에서 초기값을 지정할 수 있다.
 
 
 - 할 일
