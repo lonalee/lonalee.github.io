@@ -97,10 +97,10 @@ The end result is the same but by not mutating (or changing the underlying data)
 
 ### Functional Components
 
-Square 컴퍼넌트를 기능적(functional) component로 바꾸어본다.
-리액트에서는 기능적 컴퍼넌트는 컴퍼넌트를 작성하기 위한 보다 쉬운 방법이다. 그 컴퍼넌트들은 rendering을 위한 메소드만을 담고 있으며 그 자신들의상태와 관련된 것들은 갖고 있지 않다.
-React.Component를 확장하는 하나의 클래스를 정의하는 것 대신에, props를 인자로 받고 화면에 rendering될 내용을 return하는 함수를 작성할 수있다.
-기능적, 함수형 컴퍼넌트는 클래스 형태로 작성하는 것 보다 간결하다. 많은 컴퍼넌트들이 이러한 형태로 표현될 수 있다.
+Square 컴퍼넌트를 함수형(functional) component로 바꾸어본다.
+리액트에서는 함수형 컴퍼넌트는 컴퍼넌트를 작성하기 위한 보다 쉬운 방법이다. 그 컴퍼넌트들은 rendering을 위한 메소드만을 담고 있으며 그 자신들의 상태와 관련된 것들은 갖고 있지 않다.
+React.Component를 확장하는 하나의 클래스를 정의하는 것 대신에, props를 인자로 받고 화면에 rendering될 내용을 return하는 함수를 작성할 수 있다.
+함수형 컴퍼넌트는 클래스 형태로 작성하는 것 보다 간결하다. 많은 컴퍼넌트들이 이러한 형태로 표현될 수 있다. (class -> function)
 
 > Square 클래스에 함수 삽입
 
@@ -108,6 +108,20 @@ React.Component를 확장하는 하나의 클래스를 정의하는 것 대신�
 
 Tic-Tac-Toe게임의 순서를 명확히 하기 위해서 X,O가 번갈아서 표시되어야 한다. 첫번째는 default로 X로 시작한다. Board 컴퍼넌트의 constructor에서 초기값을 지정할 수 있다.
 
+>xIsNext: true
+
+플레이어가 움직일 때마다, 다음 플레이어가 누군지 결정하기 위해 xIsNext 프로퍼티는 반대가 될 것이다. 그리고 game 컴퍼넌트의 상태는 저장될 것이다.
+Board 컴퍼넌트의 handleClick 함수를 xIsNext의 값을 반전하기 위해서 수정해보자.
+
+xIsNext는 boolean 값으로 X,O를 구분하기 위한 state 객체의 프로퍼티이다. 클릭 발생 시 handleClick 메소드가 호출되고 클릭된 square를 알 수 있다. 이 때 삼항연산으로 현재 xIsNext가 true이면 squaresV의 해당 index에 X를, 반대의 경우는 O를 할당한다. 할당 후에는 xIsNext가 반전되어야 할 것이다. 따라서 setState 메소드로 반전 시킨 xIsNext 프로퍼티 값을 재 할당한다.
+
+> this. state는 무엇?
+> 상태 관리에 필요한 객체 (state 자체는 property)
+> 9개의 인덱스를 갖는 배열(O,X,null 관리), 순서를 보장하기 위한 boolean value를 담고 있다.
+
+### 승자 판정
+
+Now that we show which player’s turn is next, 순서가 유지되어 플레이할 수 있으므로 게임이 끝나는 순간을 결정할 수 있어야 한다. 즉, 승자를 판정하기 위해서 함수를 정의하도록 한다.
 
 - 할 일
   - view folder 생성
