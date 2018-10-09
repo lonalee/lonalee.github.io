@@ -123,6 +123,122 @@ xIsNext는 boolean 값으로 X,O를 구분하기 위한 state 객체의 프로�
 
 Now that we show which player’s turn is next, 순서가 유지되어 플레이할 수 있으므로 게임이 끝나는 순간을 결정할 수 있어야 한다. 즉, 승자를 판정하기 위해서 함수를 정의하도록 한다.
 
+### 시간 이동 기능 추가
+
+#### 자리 이동 history의 저장
+
+squares 원본 배열을 조작했다면 시간 이동 기능을 추가하는 것을 매우 어려운 일이 될 것이다.
+
+그러나, slice 메소드를 사용해서 매 움직임마다 squares의 복사본을 생성하고 squares는 변경불가능한 것으로 취급했다.
+이로 인해서 이동 발생 후에도 지속적으로 이전의 움직임을 배열로 보존할 수 있고 이전의 차례로 이동하게 만들 수도 있다.
+
+이전 버전의 squares 배열을 history라는 다른 배열에 저장하도록 한다. history 배열은 처음부터 끝까지의 모든 board states를 표현할 수 있다.
+
+### Lifting State Up, Again
+
+최상위의 Game 컴퍼넌트가 이전의 움직임들을 표시하도록 하자. 그러려면 history에 접근할 수 있어야 하므로 history state를 Game 컴퍼넌트에 위치 시킨다.
+
+history state를 Game 컴퍼넌트에 위치시키면 squares state를 Board 컴퍼넌트(child)에서 제거해도 된다.
+Square -> Board 컴퍼넌트로 상태 정보를 이동(lift up) 시킨 것 처럼 Board -> Game (child -> parent)으로 lift up 한다.
+이렇게 하면 Game 컴퍼넌트가 Board의 데이터에 대한 완전한 제어권을 갖게 되고, **Game은 Board에게 이전 차례의 움직임(history array에 담겨 있는)을 표시하도록 지시할 수 있다.**
+
+먼저,  Game 컴퍼넌트의 초기값을 constructor에 정의한다.
+
+그 다음으로 Board 컴퍼넌트가 Game 컴퍼넌트로부터 squares와 onClick props를 전달 받도록 만들어야 한다. **현재 상태는 Board 컴퍼넌트가 다수의 square들의 이벤트 처리를 하나의 핸들러로만 처리하기 때문에, 어느 square가 클릭됐는지 index number를 통해 알려줘야 한다**. Board 컴퍼넌트의 형태를 바꾸기 위해 아래 단계를 수행한다.
+
+1. constructor 삭제 ( in Board )
+2. this.state.squares[i] -> **this.props.squares[i]** (in Board’s renderSquare)
+3. this.handleClick(i) -> **this.props.onClick(i)** (in Board’s renderSquare)
+
+The Board component now looks like this:
+<생략>
+
+>현 game의 상황을 판단하고 결정하기 위한 최신의 history 진입점으로 사용하기 위해서 Game 컴퍼넌트의 render 함수를 수정한다.
+<생략>
+
+>Game 컴퍼넌트는 이제 game 진행상황을 렌더링 할 수 있으므로 Board 컴퍼넌트의 렌더링 메소드에서 이와 상응하는 코드는 필요 없을 것이다.
+<생략>
+
+
+마지막으로, HandleClick 메소드를 Board -> Game 컴퍼넌트로 이동하자.
+HandleClick을 수정할 필요도 있다. Game 컴퍼넌트의 state가 다른 구조로 정의되었기 때문이다.
+**Game의 HandleClick 메소드 내부에서 새로운 history 엔트리를 history(배열)로 한데 모은다(concat 메소드 사용).**
+
+<생략>
+
+이 시점에서 Board 컴퍼넌트는 renderSquare와 render 메소드만이 필요하다. 게임의 state와 handleClick 메소드는 Game 컴퍼넌트에 있으면 된다.
+
+### 이전 움직임들(history) 보여주기
+
+게임의 history를 기록하고 있으므로 리스트 형태로 화면에 표시할 수 있다.
+**React의 요소(element)들은 JS의 일급객체이다.** 값으로 전달할 수도 있고 return으로 사용할 수도 있다. 여러 대상을 render하기 위해서 React에서는 **요소의 배열**을 사용할 수 있다.
+
+map 메소드를 사용하여 움직임 history를 React 요소에 매핑할 수 있다. 이 요소들은 **화면의 버튼**을 표현하는 것이다. 그래서 이제 이전 움직임으로 ***jump*** 하게 만드는 버튼들을 하나의 리스트로서 표시할 수 있다.
+
+Let’s map over the history in the Game’s render method:
+<생략>
+
+게임 history의 매 turn마다 button 요소를 갖는 li를 생성한다.
+button 요소는 this.jumpTo 메소드를 호출하는 onClick 핸들러를 갖는다. 아직 이 메소드를 정의하지는 않았기 때문에, 현재는 다음과 같은 에러가 발생한다.
+
+ >a warning in the developer tools console that says:
+ >Each child in an array or iterator should have a unique “key” prop. Check the render method of “Game”.
+
+### Key 획득
+
+리스트를 render할 때, React는 rendered li요소에 대한 정보를 저장한다. 이 리스트를 업데이트할 때 React는 변경된 것이 무엇인지 알 필요가 있다.
+```
+Imagine transitioning from
+  <li>Alexa: 7 tasks left</li>
+  <li>Ben: 5 tasks left</li>
+to
+
+  <li>Ben: 9 tasks left</li>
+  <li>Claudia: 8 tasks left</li>
+  <li>Alexa: 5 tasks left</li>
+```
+
+위의 예시에서 React가 1번 list -> 2번 list로의 변화를 인식하기 위해서는 개별 li가 고유값 (key property)를 가져야 한다.
+One option would be to use the strings alexa, ben, claudia. If we were displaying data from a database, Alexa, Ben, and Claudia’s database IDs could be used as keys.
+예시의 strings (alexa, ben, claudia)를 사용할 수도 있다. 만약 DB로부터 데이터를 가져오는 것이라면 각 string의 DB ID를 key값으로 사용할 수도 있다.
+
+key is a special and reserved property in React (along with ref, a more advanced feature). When an element is created, React extracts the key property and stores the key directly on the returned element. Even though key may look like it belongs in props, key cannot be referenced using this.props.key. React automatically uses key to decide which components to update. A component cannot inquire about its key.
+
+key value는 ref와 더불어 React에서 고유한 값으로 사용된다. 요소가 생성될 때 React는 key 프로퍼티를 추출하고 생성된 요소에 즉각적으로 저장한다. key 값이 props에 속하는 것 처럼 보일 수 있지만 **이것은 this.props.key와 같은 형태로 참조할 수 없다.** React는 자동적으로 어떤 컴퍼넌트를 업데이트할 지 결정하기 위해서 key 값을 사용한다. **컴퍼넌트가 그것의 key 값을 알 수는 없다.**
+
+하나의 리스트가 re-render될 때, React는 각 li의 key를 수집하고 이전 버전의 li들에서 일치하는 key 값을 찾는다. 현재 리스트가 이전 버전에는 없는 key를 갖는다면 React는 새로운 컴퍼넌트를 생성한다. 현재 리스트에 없는 키 값이라면 React는 이전의 컴퍼넌트는 제거한다. 키 값이 일치한다면 컴퍼넌트는 이동된다. (previous -> current list) key 값은 React에게 각 컴퍼넌트의 정체에 관해 알려준다. 각 컴퍼넌트는 React로 하여금 rendering 간의 상태를 유지할 수 있도록 해준다. 어떤 컴퍼넌트에서 key 값이 바뀐다면 컴퍼넌트는 제거되었다가 새로운 상태로 다시 생성된다.
+
+
+동적으로 리스트를 생성할 때는 적절한 key 값을 할당해야만 한다. 그렇지 않으면 key 값 할당을 위해서 데이터 구조를 다시 정의해야 할 수도 있다.
+key 값이 할당되지 않으면 React는 warning을 표시하고 기본적으로 배열 index를 key로 사용한다.
+배열 index를 key로 사용하면 li의 순서를 조정하거나 추가/삭제할 때 문제의 소지가 있다.
+유일한 key 전달 (key={i})로 경고 메시지를 제거할 수 있지만 배열 index 사용과 같은 문제가 발생할 수도 있다.
+key 값들은 전역에서 유일한 값일 필요는 없다. 컴퍼넌트 간에서 유일하면 된다.
+
+### Implementing Time Travel
+
+게임의 history에서 각 이전 움직들은 유일한 ID를 갖는다. 이들은 움직임에 따른 순번이다. 이들은 재정렬되지 않고, 삭제, 삽입되지 않기 때문에 key 값으로 사용되기 적합하다.
+Game 컴퍼넌트의 render 메소드에서 <li key={move}> 형태로 key 값을 할당할 수 있고 React의 경고 메시지는 없어질 것이다.
+
+jumpTo 메소드를 정의하기 전에 stepNumber를 추가한다. stepNumber는 Game 컴퍼넌트의 state에 존재해야 하며 우리가 보고 있는 단계?, 순서?를 가리킨다.
+
+초기값(initial state) 0으로 stepNumber를 Game’s constructor에 추가한다.
+
+Game 컴퍼넌트에 stpeNumber를 업데이트하기 위해 jumpTo 메소드를 정의한다.
+
+stepNumber의 상태는 사용자의 움직임을 반영하는 것이다. 움직임이 발생하면 stepNumber가 누적?되는 방식으로 stepNumber가 변경되야 한다.
+
+새로운 움직임이 발생한 후에도 같은 움직임을 보여주지 않는 것을 보장한다.
+
+>this.state.history -> this.state.history.slice(0, this.state.stepNumber + 1)
+
+위와 같이 수정하면 특정 시점으로 되돌아간 후에도 그 시점으로부터 새롭게 이동할 수 있다. 부정확하게 될 **미래 history?**는 지워버리자!
+
+다음과 같이 작동하도록 Game 컴퍼넌트의 render 메소드를 수정한다.
+(As-Is)항상 최종 움직임을 렌더링 -> (To-Be) stepNumber에 의한 현재 선택된 움직임을 렌더링
+
+history에서 어떤 step을 클릭하면 board는 board가 step 이동이 발생한 후 어떻게 생겼었는지 보여주기 위해 즉시 업데이트 된다.
+
 - 할 일
   - view folder 생성
     - signUp.html
