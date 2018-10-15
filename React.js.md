@@ -11,7 +11,7 @@ order: 3
 
 - Board Component -> Square Component (Parent => Child)
   - Iteration Value를 Parent -> Child (data 공유는 props-properties)
-  - **여러 자식 컴퍼넌트와 부모 컴퍼넌트 또는 자식 요소끼리** 정보 공유를 위해서는 부모 컴퍼넌트에 shared state를 선언해주어야 한다.
+  - **여러 자식 컴퍼넌트와 부모 컴퍼넌트 또는 자식 요소끼리** 정보 공유를 위해서는 부모 컴퍼넌트에 state를 선언해주어야 한다.
   - Onclick 이벤트 처리
 
 - Square Component의 상태 관리
@@ -63,7 +63,6 @@ Square가 클릭되면 Board에 의해 onClick 함수가 호출되어 진다.
 
 handleClick 메소드 정의 후,
 
-After these changes, we’re again able to click on the Squares to fill them.
 Square를 클릭하여 X 마크를 할 수 있게 되었다. 그러나 현재는 상태를 개별 Square 컴퍼넌트가 아닌 **Board 컴퍼넌트 안**에 저장하는 것이다.
 Board 컴퍼넌트의 상태가 변화할 때, Square 컴퍼넌트가 자동적으로 다시 rendering을 수행한다.
 Board 컴퍼넌트 내의 모든 square (상자들)의 상태를 유지해야 승자를 결정할 수 있을 것이다.
@@ -142,7 +141,7 @@ history state를 Game 컴퍼넌트에 위치시키면 squares state를 Board 컴
 Square -> Board 컴퍼넌트로 상태 정보를 이동(lift up) 시킨 것 처럼 Board -> Game (child -> parent)으로 lift up 한다.
 이렇게 하면 Game 컴퍼넌트가 Board의 데이터에 대한 완전한 제어권을 갖게 되고, **Game은 Board에게 이전 차례의 움직임(history array에 담겨 있는)을 표시하도록 지시할 수 있다.**
 
-먼저,  Game 컴퍼넌트의 초기값을 constructor에 정의한다.
+먼저, Game 컴퍼넌트의 초기값을 constructor에 정의한다.
 
 그 다음으로 Board 컴퍼넌트가 Game 컴퍼넌트로부터 squares와 onClick props를 전달 받도록 만들어야 한다. **현재 상태는 Board 컴퍼넌트가 다수의 square들의 이벤트 처리를 하나의 핸들러로만 처리하기 때문에, 어느 square가 클릭됐는지 index number를 통해 알려줘야 한다**. Board 컴퍼넌트의 형태를 바꾸기 위해 아래 단계를 수행한다.
 
@@ -199,15 +198,12 @@ to
 ```
 
 위의 예시에서 React가 1번 list -> 2번 list로의 변화를 인식하기 위해서는 개별 li가 고유값 (key property)를 가져야 한다.
-One option would be to use the strings alexa, ben, claudia. If we were displaying data from a database, Alexa, Ben, and Claudia’s database IDs could be used as keys.
-예시의 strings (alexa, ben, claudia)를 사용할 수도 있다. 만약 DB로부터 데이터를 가져오는 것이라면 각 string의 DB ID를 key값으로 사용할 수도 있다.
 
-key is a special and reserved property in React (along with ref, a more advanced feature). When an element is created, React extracts the key property and stores the key directly on the returned element. Even though key may look like it belongs in props, key cannot be referenced using this.props.key. React automatically uses key to decide which components to update. A component cannot inquire about its key.
+예시의 strings (alexa, ben, claudia)를 사용할 수도 있다. 만약 DB로부터 데이터를 가져오는 것이라면 각 string의 DB ID를 key값으로 사용할 수도 있다.
 
 key value는 ref와 더불어 React에서 고유한 값으로 사용된다. 요소가 생성될 때 React는 key 프로퍼티를 추출하고 생성된 요소에 즉각적으로 저장한다. key 값이 props에 속하는 것 처럼 보일 수 있지만 **이것은 this.props.key와 같은 형태로 참조할 수 없다.** React는 자동적으로 어떤 컴퍼넌트를 업데이트할 지 결정하기 위해서 key 값을 사용한다. **컴퍼넌트가 그것의 key 값을 알 수는 없다.**
 
 하나의 리스트가 re-render될 때, React는 각 li의 key를 수집하고 이전 버전의 li들에서 일치하는 key 값을 찾는다. 현재 리스트가 이전 버전에는 없는 key를 갖는다면 React는 새로운 컴퍼넌트를 생성한다. 현재 리스트에 없는 키 값이라면 React는 이전의 컴퍼넌트는 제거한다. 키 값이 일치한다면 컴퍼넌트는 이동된다. (previous -> current list) key 값은 React에게 각 컴퍼넌트의 정체에 관해 알려준다. 각 컴퍼넌트는 React로 하여금 rendering 간의 상태를 유지할 수 있도록 해준다. 어떤 컴퍼넌트에서 key 값이 바뀐다면 컴퍼넌트는 제거되었다가 새로운 상태로 다시 생성된다.
-
 
 동적으로 리스트를 생성할 때는 적절한 key 값을 할당해야만 한다. 그렇지 않으면 key 값 할당을 위해서 데이터 구조를 다시 정의해야 할 수도 있다.
 key 값이 할당되지 않으면 React는 warning을 표시하고 기본적으로 배열 index를 key로 사용한다.
@@ -238,6 +234,26 @@ stepNumber의 상태는 사용자의 움직임을 반영하는 것이다. 움직
 (As-Is)항상 최종 움직임을 렌더링 -> (To-Be) stepNumber에 의한 현재 선택된 움직임을 렌더링
 
 history에서 어떤 step을 클릭하면 board는 board가 step 이동이 발생한 후 어떻게 생겼었는지 보여주기 위해 즉시 업데이트 된다.
+
+1. Display the location for each move in the format (col, row) in the move history list.
+    1. 행과 열의 좌표를 history list에 표시하기
+        x,y 축을 각각 프로퍼티로 하는 객체
+        { col: 1, row: 1}
+        { col: 0, row: 0}
+        { col: 0, row: 0}
+        클릭되는 스퀘어는 index넘버로 구별할 수 있다.
+        index : 0 ~ 2까지는 3으로 나누면 몫이 1 미만
+        index : 3 ~ 5까지는 3으로 나누면 몫이 1 이상
+        index : 6 ~ 8까지는 3으로 나누면 몫이 2 이상
+
+
+2. Bold the currently selected item in the move list.
+    1. history에서 클릭된 버튼을 어떻게 식별하는가?
+    2.
+3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
+4. Add a toggle button that lets you sort the moves in either ascending or descending order.
+5. When someone wins, highlight the three squares that caused the win.
+6. When no one wins, display a message about the result being a draw.
 
 - 할 일
   - view folder 생성
