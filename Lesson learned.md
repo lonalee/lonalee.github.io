@@ -107,3 +107,12 @@ in JavaScript, true && expression always evaluates to expression, and false && e
                       </small>
                   )}
 ```
+
+### GIT 사용법
+
+#### 로컬에서 작업을 하다가 GIT repo를 만들게 될 경우
+
+git repo를 생성 후
+git init : 로컬 디렉토리에서 git repo로 지정
+git remote --fetch origin URL (online repo와 로컬 연결)
+git add -> commit -> push
